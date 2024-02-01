@@ -1,0 +1,28 @@
+---
+title: "Using RStudio Projects to collaborate"
+subtitle: "Math 241, Week 2"
+output: pdf_document
+---
+
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, warning = FALSE, message = FALSE)
+```
+
+# RStudio Projects
+
+
+* To access files in this project, I use relative paths:
+
+```{r}
+library(tidyverse)
+airbnb <- read_csv('../data/listings.csv')
+```
+
+## Explore one aspect of the `airbnb` dataset by creating a visualization using `ggplot2`
+
+```{r, eval = FALSE}
+library(ggplot2)
+airbnb %>%
+  ggplot()

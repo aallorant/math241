@@ -1,0 +1,56 @@
+---
+title: "Lab 1"
+#author: "Insert Name"
+date: "Math 241, Week 1"
+output:
+  pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Due: Thursday, February 1st at 9:00am
+
+## Goals of this lab
+
+1. Practice collecting data.
+1. Practice mapping data to a visualization.
+
+
+## Requirements
+
+* Collect data on some aspect of your life between now and Feb 1st.
+    + Pick a time span (e.g., day, week, evening) that aligns well with the data you are collecting.
+* Determine how you want to map the data to objects.
+* Create three practice sketches.
+* On the postcard,
+    + Create a visualization of the data on the front.
+    + On the back left, create legends so that no additional explanation is needed.
+* The target audience is a person with no background in statistics.
+
+
+
+## Suggestions
+
+* Reflect on what aspects of your world you might want to better understand through data.
+* Collect data on several variables.  Before you collect data, ...
+    + It is hard to know what will prove interesting.
+    + It is hard to know what will be hard to collect.
+* Peruse the ["Dear Data" website](https://www.dear-data.com/all) for ideas.
+    + But your postcard must be unique.
+
+## Rubric
+
+When I assess your postcard, I will be looking for:
+
+* The presence of data and a story.
+* An appropriate mapping from data to geometric objects.
+* How engaging and creative the visualization is.
+* How clear, readable, and complete the visualization and legends are.  
+* Whether it requires statistical knowledge to understand.
+
+
