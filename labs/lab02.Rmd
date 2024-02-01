@@ -47,12 +47,27 @@ library(viridis)
 The dataset can be found in the `dsbox` package, and is called `accidents`. It covers all recorded accidents in Edinburgh in 2018; compared to the dataset made available by the UK government, some of the variables were modified for the purposes of the package. You can find out more about the dataset by inspecting its documentation with `?accidents`. Recreate the following plot, and interpret the results.
 
 
-```{r, out.width="100%", echo=FALSE, eval = FALSE}
+```{r, out.width="100%", echo=FALSE}
 knitr::include_graphics("../img/edi-accidents-1.png")
 ```
 
 
-### Problem 2: Style This Code!
+### Problem 2: One Dataset, Visualized ~~25~~ 5 Ways
+
+Inspired by Nathan Yau's [One Dataset, Visualized 25 Ways](https://flowingdata.com/2017/01/24/one-dataset-visualized-25-ways/), I want you to create 5 visualizations of the same data. You can use the `mpg` dataset or another dataset of your choosing, including the `accidents` dataset above. Make sure you have the data manual open for this problem!  
+
+a. Pick 3 - 4 variables you want to explore.  Provide their code names here.
+
+b. Create 5 graphs.  A few things to consider:
+    + Like Nathan's graphs, they don't all have to contain every one of your selected variables.
+    + You can't use the same `geom` for all four graphs but you can use the same `geom` more than once.
+    + Think carefully about color, the coordinate system, and scales.
+    + Feel free to subset or wrangling the dataset if you want to but it isn't required.
+
+c. Discuss the pros/cons of your graphs.  What useful information can be gleaned?  How do the different geoms and aesthetics impact the story?
+
+
+### Problem 3: Style This Code!
 
 Take the following code and don't change its functionality but DO change its style.  Use the [Tidyverse Style Guide](https://style.tidyverse.org/)!
 
@@ -66,7 +81,7 @@ ggplot(thing.132232, aes(y=theanimalsweightisthisnumber,x=y))+geom_col()+scale_y
 
 
 
-### Problem 3: Imitation is the Sincerest Form of Flattery
+### Problem 4: Imitation is the Sincerest Form of Flattery
 
 For this problem, I want you to try to recreate a FiveThirtyEight.com graphic.  Awesomely, they share their data with the world [here](https://data.fivethirtyeight.com/).  (Note: You don't need to recreate all their branding/background color scheme.)
 
@@ -84,26 +99,24 @@ c. Now make the graph better somehow.
 
 d. Justify why your rendition of this `FiveThirtyEight.com` graph is more effective at telling the data story than the original. 
 
-### Problem 4: Rental apartments in SF
+### Problem 5: Rental apartments in SF
 
 The data for this exercise comes from `TidyTuesday`, and is on rental prices in San Francisco. You can find out more about the dataset by inspecting its documentation [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-07-05). The dataset you'll be using is called `rent`. Create a visualization that will help you compare the distribution of rental prices (`price`) per bedroom (`beds`) across neighborhoods (`nhood`) in the city of San Francisco `(city == "san francisco")`, over time. 
 
 Limit your analysis to rentals where the full unit is available, i.e. (`room_in_apt	== 0`). You have the flexibility to choose which years and which neighborhoods. Note that you should have a maximum of 8 neighborhoods on your visualization, but one or more of them can be a combination of many (e.g., an "other" category). Your visualization should also display some measure of the variability in your data.
 You get to decide what type of visualization to create and there is more than one correct answer! In your answer, include a brief description of why you made the choices you made as well as an interpretation of the findings of how rental prices vary over time and neighborhoods in San Francisco.
 
-### Problem 5: One Dataset, Visualized ~~25~~ 5 Ways
+```{r, eval = F}
+# Get the Data
 
-Inspired by Nathan Yau's [One Dataset, Visualized 25 Ways](https://flowingdata.com/2017/01/24/one-dataset-visualized-25-ways/), I want you to create 5 visualizations of the same data.  Make sure you have the data manual open for this problem!
+# Read in with tidytuesdayR package 
+# Install from CRAN via: install.packages("tidytuesdayR")
+# This loads the readme and all the datasets for the week of interest
 
-a. Pick 3 - 4 variables you want to explore.  Provide their code names here.
+library(tidytuesdayR)
+tuesdata <- tidytuesdayR::tt_load('2022-07-05') # this could take a minute
 
-b. Create 5 graphs.  A few things to consider:
-    + Like Nathan's graphs, they don't all have to contain every one of your selected variables.
-    + You can't use the same `geom` for all four graphs but you can use the same `geom` more than once.
-    + Think carefully about color, the coordinate system, and scales.
-    + Feel free to subset or wrangling the dataset if you want to but it isn't required.
+rent <- tuesdata$rent
 
-c. Discuss the pros/cons of your graphs.  What useful information can be gleaned?  How do the different geoms and aesthetics impact the story?
-
-
+```
 
