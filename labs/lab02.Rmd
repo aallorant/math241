@@ -16,6 +16,10 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 # Put all necessary libraries here
 # I got you started!
 # The first time you want to install the dsbox package; then you can comment it out.
+# If you have not installed the devtools package, you will need to do so first
+# install.packages("devtools")
+# library(devtools)
+
 devtools::install_github("tidyverse/dsbox")
 library(dsbox)
 library(tidyverse)
