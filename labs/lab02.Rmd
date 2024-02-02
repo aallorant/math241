@@ -10,20 +10,21 @@ urlcolor: blue
 ```{r setup, include=FALSE}
 # Do not modify this chunk.
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
-
-
 ```
 
 ```{r}
 # Put all necessary libraries here
 # I got you started!
+# The first time you want to install the dsbox package; then you can comment it out.
+devtools::install_github("tidyverse/dsbox")
+library(dsbox)
 library(tidyverse)
 library(viridis)
 ```
 
 
 
-## Due: Thursday, February 15th at 8:30am
+## Due: Thursday, February 8th at 8:30am
 
 ## Goals of this lab
 
