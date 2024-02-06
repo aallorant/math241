@@ -1,0 +1,68 @@
+---
+title: "Collaborating with GitHub"
+subtitle: Adrien Allorant - Math/Stat 241 - Week 3
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Form groups of 3-4 people.
+2. Exchange GitHub user names with your group members. Then, work through the following steps.
+
+## Part 1: Collaborating smoothly
+
+3. Choose one person in the group to create a repo on their personal github account titled `collaborate`. That person should then go to the Github repo "Settings", click on "Manage Access", then "Add People", and then add each group member as an Admin (this only gives them admin rights to the repo, not your entire github profile!)
+
+4. Then, each person (including the original repo creator) should clone the `collaborate` repo to their local workspace.
+
+5. The original repo creator should then add a new .Rmd file called `group_names.Rmd`. In this file, delete everything after the YAML and add a line that says `Names:`. After doing so, the repo creator should add their name to the line, commit the changes and push back to Github.
+
+6. One by one, each person in the group should 
+
+(a) pull changes from the repo
+
+(b) add their name to the names line
+
+(c) commit the change
+
+(d) push to Github
+
+7. Since all changes happen in stages, there should be no conflicts and workflow should be mostly identical to working solo.
+
+8. Verify by navigating to the Github repo via a web broswer that there is an .Rmd file with everyone's name on the name line.
+
+## Part 2: Collaborating not-so-smoothly
+
+9. Each person should again pull changes from the repo to update their cloned version to the version on Github.
+
+10. Now, each person should **simultaneously** add a line to the .Rmd file which says `Favorite Candy: (name of candy)` where (name of candy) is replaced by your actual favorite candy. Commit the change.
+
+11. Nominate one person to push to the Github repo. 
+
+12. Now have another person attempt to push to the repo. Note the error message. Instead **pull** from the repo and note the message in the `Git pull` window. This person should then *resolve the merge conflict* by making changes in the .Rmd by adding both candies on the `Favorite Candy` line, and then deleting extraneous lines. Commit the changes and push to Github.
+
+13. Repeat the previous step for each person in the group (including the person nominated in step 11). 
+
+14. Verify that the version of the .Rmd file on Github contains a line with everyone's favorite candy.
+
+## Part 3: Collaborating via branches and pull-requests
+
+15. Each person should pull changes from the repo to update their cloned version.
+
+16. Now, each person should create a *branch* of the repo. Label the branch name with your name. Note that the word `main` has been replaced by the name of your branch, indicating that you are working on a seperate branch of the project.
+
+17. Each person should create a new line which says `Favorite color: (color)` where (color) is replaced by your favorite color. Commit the change and push to Github.
+
+18. Now, each person should pull from Github (and note the message that appears). Add another line to the .Rmd which says `Favorite Movie: (movie title)` where (movie title) is replaced with your favorite movie. Commit the changes, and again push to Github.
+
+19. Nominate one person to navigate to the Github repo via web browser, click on the 'Code' tab, click on the link that says `(N) branches` (where N is the number of people in your group). Look for your branch name in the list, and then click on the button that says `New Pull Request`. Add a comment indicating the plan changes to make, and click "Create Pull Request."
+
+20. Have another person navigate to the repo via web broswer, click on the "Pull requests" button, find the pull request, and click on "Resolve Conflicts". Make changes to the .rmd to synthesize colors and movies and then click "mark as resolved" and then "Commit merge." Finally, click the green "Merge pull request" button and "confirm merge" button. You may delete the branch as well, to keep your repo tidy.
+
+21. Have another person repeat steps 18 and 19, until all branches have been merged with `main`.
+
+22. Navigate to the repo via web browser and verify that the .Rmd file contains everyone's favorite color and movie.
+
+23. Congratulations! You've successfully collaborated via Github.
