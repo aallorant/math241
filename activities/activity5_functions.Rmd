@@ -1,6 +1,6 @@
 ---
 title: "R functions"
-#author: "Insert Name"
+author: "Omar Youssif"
 date: "Math 241, Week 3"
 output:
   pdf_document
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ```{r libraries, message = FALSE}
 # it's good practice to check that all the packages required are loaded and installed
-libs <- c('tidyverse','knitr','viridis','mdsr', 'macleish','babynames')
+libs <- c('tidyverse','knitr','viridis','mdsr', 'macleish','babynames', 'mosaicData')
 for(l in libs){
   if(!require(l,character.only = TRUE, quietly = TRUE)){
     message( sprintf('Did not have the required package << %s >> installed. Downloading now ... ',l))
@@ -40,9 +40,16 @@ Write a function called `count_name` that, when given a name as an argument, ret
 
 ```{r, eval= FALSE}
 data(babynames) # this will explicitly ask R to load the babynames dataset to your environment
-count_name <- function(name){
+count_name <- function(input){
   # your code here
+  temp_data <- filter(babynames, name == input) %>% 
+    select(year, name, n)
+  if (count(temp_data) < 1) 
+    {stop("There are no matches for the name: ", input)} 
+  else 
+    {return(temp_data)}
 }
+count_name("")
 ```
 
 
@@ -52,9 +59,13 @@ count_name <- function(name){
 
 ```{r, eval= FALSE}
 data(HELPfull) # this will explicitly ask R to load the HELPfull dataset to your environment
+library(mosaicData)
+glimpse(HELPfull)
 count_na <- function(x){
   # your code here
+    
 }
+count_na()
 ```
 
 2. Apply `count_na` to the columns of the `Teams` data frame from the `Lahman` package. How many of the columns have missing data?
@@ -71,6 +82,7 @@ of flights missing arrival delay for each day to that destination. Apply this fu
 
 ```{r, eval= FALSE}
 library(nycflights13)
+
 prop_cancel <- function(monthnum, airport) {
   # your code here
 }

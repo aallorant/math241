@@ -1,6 +1,6 @@
 ---
 title: "Lab 2"
-#author: "Insert Name"
+author: "Omar Youssif"
 date: "Math 241, Week 2"
 output:
   pdf_document
@@ -24,6 +24,8 @@ devtools::install_github("tidyverse/dsbox")
 library(dsbox)
 library(tidyverse)
 library(viridis)
+library(readr)
+library(ggrepel)
 ```
 
 
@@ -52,8 +54,18 @@ library(viridis)
 The dataset can be found in the `dsbox` package, and is called `accidents`. It covers all recorded accidents in Edinburgh in 2018; compared to the dataset made available by the UK government, some of the variables were modified for the purposes of the package. You can find out more about the dataset by inspecting its documentation with `?accidents`. Recreate the following plot, and interpret the results.
 
 
-```{r, out.width="100%", echo=FALSE}
-knitr::include_graphics("../img/edi-accidents-1.png")
+```{r, out.width="100%", echo=T}
+accidents2 <- mutate(accidents, daytype = ifelse(day_of_week %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday"), "Weekday", "Weekend"))
+
+ggplot(data = accidents2, mapping = aes(x = time, fill = severity)) +
+  geom_density(alpha = 0.5) + scale_fill_manual(values=c("darkorchid4", "turquoise4", "yellow")) +
+  labs(fill = "Severity", 
+       y = "Density", 
+       x = "Time of day", 
+       title = "Number of accidents throughout the day", 
+       subtitle = "By day of week and severity") + 
+  facet_wrap(~ daytype, ncol = 1) +
+  theme_minimal()
 ```
 
 
@@ -71,17 +83,95 @@ b. Create 5 graphs.  A few things to consider:
 
 c. Discuss the pros/cons of your graphs.  What useful information can be gleaned?  How do the different geoms and aesthetics impact the story?
 
+*************************************
+a. I'll be using cyl, manufacturer, cty, and drv.
+
+b. 
+
+```{r}
+mpg2 <- mutate(mpg, family = case_when(manufacturer %in% c("volkswagen", "audi") ~ "Volkswagen", 
+                                       manufacturer %in% c("dodge", "jeep") ~ "Stellantis", 
+                                       manufacturer %in% c("subaru", "lexus", "toyota") ~ "Toyota", 
+                                       manufacturer %in% c("lincoln", "ford", "mercury") ~ "Ford", 
+                                       manufacturer %in% c("land rover") ~ "Tata", 
+                                       manufacturer %in% c("nissan") ~ "Renault", 
+                                       manufacturer %in% c("hyundai", "kia") ~ "Hyundai-Kia", 
+                                       manufacturer %in% c("chevrolet", "pontiac") ~ "General Motors",
+                                       manufacturer %in% c("honda") ~ "Honda"))
+
+```
+
+```{r}
+ggplot(data = mpg2, mapping = aes(x=fct_reorder(manufacturer, family), y = cty, fill = family)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust= 1)) +
+  labs(title = "Average Miles Per Gallon with City Driving by Car Brand and Family",
+       subtitle = "Fuel economy data from 1999 to 2008",
+       x = "Car Brands",
+       y = "Mile Per Gallon (in the city)",
+       fill = "Brand Owners")
+```
+
+```{r}
+ggplot(data = mpg2, mapping = aes(x=as.character(cyl), y = cty, fill = as.character(cyl))) +
+  geom_boxplot() +
+  theme(legend.position="none") +
+  labs(title = "Average Miles Per Gallon with City Driving by Engine Cylinder Count",
+       subtitle = "Fuel economy data from 1999 to 2008",
+       x = "Number of cylinders in an engine",
+       y = "Mile Per Gallon (in the city)")
+```
+```{r}
+ggplot(data = mpg2, mapping = aes(x=drv, y = cty, fill = as.character(cyl))) +
+  geom_col() +
+  labs(title = "Distribution of Cars by Drivetrains and Cylinders",
+       subtitle = "Fuel economy data from 1999 to 2008",
+       x = "Drivetrain (front, rear, all-wheel)",
+       y = "Number of Cars",
+       fill = "Number of cylinders in engine")
+```
+
+```{r}
+ggplot(data = mpg2, mapping = aes(x=fct_reorder(manufacturer, family), y = cty, fill = family)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust= 1)) +
+  labs(title = "Distribution of Popular Car Brands and Their Owners",
+       subtitle = "Fuel economy data from 1999 to 2008",
+       x = "Car Brands",
+       y = "Number of Cars",
+       fill = "Brand Owners")
+```
+
+```{r}
+ggplot(data = mpg2, mapping = aes(x=manufacturer, y = cty, fill = as.character(cyl))) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 50, vjust = 1, hjust= 1)) +
+  labs(title = "Distribution of Popular Car Brands and Their Cylinder Counts",
+       subtitle = "Fuel economy data from 1999 to 2008",
+       x = "Car Brands",
+       y = "Number of Cars",
+       fill = "Number of Cylinders")
+```
+
+c. My graphs are able to show some relationships between some variables (like car brand and mpg) and allows the reader to make conclusions about the relationships on their own. The colors and how it is displayed also allows for clear distinctions between the different variables. However, the graphs are not telling an interestingly different story in some of them, even though it's the same data set (perhaps it's harder due to how smaller this data set is?). 
+
+*************************************
+
 
 ### Problem 3: Style This Code!
 
 Take the following code and don't change its functionality but DO change its style.  Use the [Tidyverse Style Guide](https://style.tidyverse.org/)!
 
 ```{r}
-thing.132232=data.frame(theanimalsweightisthisnumber=c(runif(3),NA),y=c("cat","mouse","dog","rat"))
-median(thing.132232$theanimalsweightisthisnumber, TRUE);mean(thing.132232$theanimalsweightisthisnumber, 0 , TRUE); var(thing.132232$theanimalsweightisthisnumber, NULL, TRUE)
+animal_weight = data.frame(weight = c(runif(3),NA), y = c("cat","mouse","dog","rat"))
+median(animal_weight$weight, TRUE);
+mean(animal_weight$weight, 0 , TRUE); 
+var(animal_weight$weight, NULL, TRUE)
 
 
-ggplot(thing.132232, aes(y=theanimalsweightisthisnumber,x=y))+geom_col()+scale_y_continuous()
+ggplot(animal_weight, aes(y = weight, x = y)) +
+  geom_col() +
+  scale_y_continuous()
 ```
 
 
@@ -93,16 +183,44 @@ For this problem, I want you to try to recreate a FiveThirtyEight.com graphic.  
 a. Take a screenshot of the graph, upload it to the same folder on the server where you have saved your lab, and insert the file name below.  Then change the `eval = FALSE` to `eval = TRUE`.
 
 
-```{r, out.width="100%", echo=FALSE, eval = FALSE}
-knitr::include_graphics("../img/538_graph.png")
+```{r, out.width="100%", echo=T, eval = TRUE}
+knitr::include_graphics("~/Github/math241/labs/lab2pic.png")
 ```
 
 
 b. Load the data and recreate the graph as best as you can.  
 
+```{r fig.height=7, fig.width=7}
+airline_safety <- read_csv("~/Github/math241/labs/airline-safety.csv")
+
+airline_safety <- mutate(airline_safety, 
+                         fatalities_per_1t_85_99 = as.integer((fatalities_85_99 / (avail_seat_km_per_week * 7 / 10000000000))), 
+                         fatalities_per_1t_00_14 = as.integer((fatalities_00_14 / (avail_seat_km_per_week * 7 / 10000000000))))
+
+ggplot(data = airline_safety, mapping = aes(x = fatalities_per_1t_85_99, y = fatalities_per_1t_00_14, label = airline)) +
+  geom_point(alpha = 0.5) +
+  geom_text_repel(data = subset(airline_safety, airline %in% c("Kenya Airways", "Malaysia Airlines", "China Airlines", "Pakistan International", "Avianca")), 
+                  aes(label= airline)) +
+  geom_segment(aes(x = 0, y = 100, xend = 1162, yend = 100, color = "red")) +
+  scale_x_continuous(name="1985-99", limits=c(0, 1550), breaks=c(0, 250, 500, 750, 1000, 1250, 1500)) +
+  scale_y_continuous(name="2000-14", limits=c(0, 1550), breaks = c(0, 250, 500, 750, 1000, 1250, 1500)) +
+  labs(title = "Fatalities by Airline Are Highly Unpredictable",
+       subtitle = "Fatalities adjusted for seats available and distance traveled\n(deaths per 1 billion seat kilometers)") +
+  theme(aspect.ratio = 1, 
+        plot.title = element_text(hjust = 0, face = "bold"), 
+        plot.subtitle = element_text(hjust = 0),
+        axis.title = element_text(face = "bold"),
+        legend.position="none")
+```
+
+
 c. Now make the graph better somehow.
 
-d. Justify why your rendition of this `FiveThirtyEight.com` graph is more effective at telling the data story than the original. 
+I made the data a little more accurate, and also made the names listed on the graph not nudge the point, like it does in the graph. I also corrected a mistake they did where they said it was deaths per 1 trillion seat kilometers, when in reality it was billion not trillion. 
+
+d. Justify why your rendition of this `FiveThirtyEight.com` graph is more effective at telling the data story than the original.
+
+It's more effective due to slightly more accurate points due to not nudging points and also has a more accurate subtext that would lessen the dramatization of the insuiuated safety. I'm not sure whether it was intentional or not, but they had a big mistake where they said the unit was in trillions, while it was in billions, and my rendition is correct.
 
 ### Problem 5: Rental apartments in SF
 
@@ -111,7 +229,7 @@ The data for this exercise comes from `TidyTuesday`, and is on rental prices in 
 Limit your analysis to rentals where the full unit is available, i.e. (`room_in_apt	== 0`). You have the flexibility to choose which years and which neighborhoods. Note that you should have a maximum of 8 neighborhoods on your visualization, but one or more of them can be a combination of many (e.g., an "other" category). Your visualization should also display some measure of the variability in your data.
 You get to decide what type of visualization to create and there is more than one correct answer! In your answer, include a brief description of why you made the choices you made as well as an interpretation of the findings of how rental prices vary over time and neighborhoods in San Francisco.
 
-```{r, eval = F}
+```{r, eval = T}
 # Get the Data
 
 # Read in with tidytuesdayR package 
@@ -125,3 +243,21 @@ rent <- tuesdata$rent
 
 ```
 
+```{r fig.width=8}
+rent_data <- filter(tuesdata$rent, city == "san francisco", room_in_apt	== 0)
+rent_data <- filter(rent_data, nhood %in% (rent_data %>% group_by(nhood) %>% summarize(n = n()) %>% top_n(4) %>% pull(nhood))) %>% filter(year > 2012, price > 1000, price < 30000)
+
+ggplot(data = rent_data, mapping = aes(color = as.character(beds), x = price, shape = as.character(year), y = nhood)) +
+  geom_point(position = "jitter", alpha = 0.5) + 
+  scale_x_continuous(trans = "log10") + labs(
+    title = "Distribution of housing by beds, price, top neighborhoods\nover time in San Francisco",
+    color = "Number of Beds",
+    shape = "Year",
+    x = "Price (USD)",
+    y = "Neighboorhood"
+  )
+
+
+```
+
+I have made things look visible in a way that shows trends, rather than individual points. With this many data points, I believe the focus should be that someone can gather some information about housing trends, which is clear with the price and number of beds relationship, and also the shapes that are visible should give a sense of what year these numbers are from. We can see that within this era, not much has changed, but most look pretty expensive regardless.
