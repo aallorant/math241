@@ -1,0 +1,169 @@
+---
+title: "Lab 3"
+#author: "Insert Name"
+date: "Math 241, Week 3"
+output:
+  pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+
+```
+
+```{r}
+libs <- c('tidyverse','knitr','viridis', 'mosaic','mosaicData','babynames', 'Lahman','nycflights13','rnoaa')
+for(l in libs){
+  if(!require(l,character.only = TRUE, quietly = TRUE)){
+    message( sprintf('Did not have the required package << %s >> installed. Downloading now ... ',l))
+    install.packages(l) 
+  }
+  library(l, character.only = TRUE, quietly = TRUE)
+}
+
+```
+
+
+
+## Due: Friday, February 16th at 8:30am
+
+## Goals of this lab
+
+1. Practice creating functions.
+1. Practice refactoring your code to make it better!  Therefore for each problem, make sure to test your functions.
+
+
+### Problem 1: Subset that R Object
+
+Here are the R objects we will use in this problem (`dats`, `pdxTreesSmall` and `ht`).    
+
+```{r}
+library(pdxTrees)
+library(mosaicData)
+
+pdxTrees <- get_pdxTrees_parks()
+# Creating the objects
+dats <- list(pdxTrees  = head(pdxTrees),
+             Births2015 = head(Births2015),
+             HELPrct = head(HELPrct), 
+             sets = c("pdxTrees", "Births2015", 
+                      "HELPrct"))
+
+pdxTreesSmall  <- head(pdxTrees)
+
+ht <- head(pdxTrees$Tree_Height, n = 15)
+
+```
+
+a. What are the classes of `dats`, `pdxTreesSmall` and `ht`?
+
+b. Find the 10th, 11th, and 12th values of `ht`.
+
+c. Provide the `Species` column of `pdxTrees` as a data frame with one column.
+
+d. Provide the `Species` column of `pdxTrees` as a character vector.
+
+e. Provide code that gives us the second entry in `sets` from `dats`.
+
+f. Subset `pdxTreesSmall` to only `Douglas-fir` and then provide the `DBH` and `Condition` of the 4th `Douglas-fir` in the dataset.  (Feel free to mix in some `tidyverse` code if you would like to.)
+
+
+
+
+### Problem 2: Function Creation
+
+Figure out what the following code does and then turn it into a function. For your new function, do the following:
+
+* Test it.
+* Provide default values (when appropriate).
+* Use clear names for the function and arguments.
+* Make sure to appropriately handle missingness.
+* Generalize it by allowing the user to specify a confidence level.
+* Check the inputs and stop the function if the user provides inappropriate values.
+
+
+```{r}
+library(pdxTrees)
+thing1 <- length(pdxTrees$DBH)
+thing2 <- mean(pdxTrees$DBH)
+thing3 <- sd(pdxTrees$DBH)/sqrt(thing1)
+thing4 <- qt(p = .975, df = thing1 - 1)
+thing5 <- thing2 - thing4*thing3
+thing6 <- thing2 + thing4*thing3
+```
+
+
+
+
+
+### Problem 3: Wrapper Function for your `ggplot`
+
+
+While we (i.e. Math 241 students) all love the grammar of graphics, not everyone else does. So for this problem, we are going to practice creating wrapper functions for `ggplot2`.
+
+Here's an example of a wrapper for a histogram.  Notice that I can't just list the variable name as an argument.  The issue has to do with how many of the `tidyverse` functions evaluate the arguments. Therefore we have to quote (`enquo()`) and then unquote (`!!`) the arguments.  (If you want to learn more, go [here](https://tidyeval.tidyverse.org/).)
+
+```{r}
+# Minimal viable product working code
+ggplot(data = pdxTrees, mapping = aes(x = DBH)) +
+  geom_histogram()
+
+# Shorthand histogram function
+histo <- function(data, x){
+   x <- enquo(x)
+  ggplot(data = data, mapping = aes(x = !!x)) +
+    geom_histogram()
+}
+
+# Test it
+histo(pdxTrees, DBH)
+```
+
+a. Edit `histo()` so that the user can set 
+
+* The number of bins
+* The fill color for the bars
+* The color outlining the bars
+
+b. Write code to create a basic scatterplot with `ggplot2`. Then write and test a function to create a basic scatterplot.
+
+c. Modify your scatterplot function to allow the user to ...
+
+* Color the points by another variable.
+* Set the transparency.
+
+d. Write and test a function for your favorite `ggplot2` graph.
+
+
+### Problem 4: Functioning `dplyr`
+
+
+a. Take the following code and turn it into an R function to create a **conditional proportions** table.  Similar to `ggplot2`, you will need to quote and unquote the variable names.  Make sure to test your function!
+
+```{r}
+pdxTrees %>%
+  count(Native, Condition) %>%
+  group_by(Native) %>%
+  mutate(prop = n/sum(n)) %>%
+  ungroup()
+```
+
+
+b.  Write a function to compute the mean, median, sd, min, max, sample size, and number of missing values of a quantitative variable by the categories of another variable.  Make sure the output is a data frame (or tibble).  Don't forget to test your function.
+
+
+### Problem 5: another `babynames` exercise
+
+Write a function called grab_name that, when given a **name** ***and a year*** as an argument, returns the rows from the `babynames` data frame in the `babynames` package that match that name for that year (and returns an error if that name and year combination does not match any rows). Run the function once with the arguments **Ezekiel and 1883** and once with **Ezekiel and 1983**.
+
+```{r, eval=FALSE}
+#' Make sure to switch eval = FALSE to eval = TRUE before knitting!!
+
+grab_name <- function(myname, myyear) {
+  # Code your function here
+}
+
+```
