@@ -42,3 +42,48 @@ Teams %>%
   select(yearID, HR, HRA) %>%
   pivot_longer()
 ```
+
+
+## Problem 2 (Medium): 
+Use the `nycflights13` package and the `flights` and `planes` tables to answer the following questions:
+
+a. How many planes have a missing date of manufacture?
+
+```{r, eval = F}
+library(nycflights13)
+planes2 <- select(planes, tailnum, year, manufacturer)
+flights2 <- select(flights, tailnum)
+nyc_flights <- left_join()
+```
+
+b. What are the five most common manufacturers?
+
+```{r, eval = F}
+nyc_flights %>%
+```
+
+## Problem 3 (Medium): 
+Use the `nycflights13` package and the `flights` and `planes` tables to answer the following questions:
+
+a. What is the oldest plane (specified by the `tailnum` variable) that flew from
+New York City airports in 2013?
+
+b. How many airplanes that flew from New York City are included in the
+planes table?
+
+
+## Problem 4 (Medium):
+
+The `knitr` package allows the analyst to display nicely formatted tables and results when outputting to pdf files. Use the following code chunk as an example to create a similar display for the `penguins` dataset, in the `palmerpenguins` package, instead (you can model penguins' `body_mass_g` as a function of their `flipper_length_mm` and `sex`):
+
+```{r}
+library(palmerpenguins)
+mod <- broom::tidy(lm(cesd ~ mcs + sex, data = HELPrct))
+knitr::kable(
+  mod,
+  digits = c(0, 2, 2, 2, 4),
+  caption = "Regression model from HELP clinical trial.",
+  longtable = TRUE
+)
+```
+
