@@ -1,0 +1,44 @@
+---
+title: "More data Wrangling with tidyR"
+#author: "Insert Name"
+date: "Math 241, Week 4"
+output:
+  pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r libraries, message = FALSE}
+# it's good practice to check that all the packages required are loaded and installed
+libs <- c('tidyverse','knitr','viridis','mosaicData','babynames','mdsr','Lahman','nycflights13')
+for(l in libs){
+  if(!require(l,character.only = TRUE, quietly = TRUE)){
+    message( sprintf('Did not have the required package << %s >> installed. Downloading now ... ',l))
+    install.packages(l) 
+  }
+  library(l, character.only = TRUE, quietly = TRUE)
+}
+```
+
+## Goals of this in-class activity:
+
+- Practice data wrangling and joins with tidyR
+
+## Notes:
+
+* Be prepared to ask for help from me, Tory, and your classmates!
+
+## Problem 1 (Medium): 
+Consider the number of home runs hit (HR) and home runs allowed (HRA) for the Chicago Cubs (CHN) baseball team. Reshape the Teams data from the Lahman package into “long” format and plot a time series conditioned on whether the HRs that involved the Cubs were hit by them or allowed by them.
+
+```{r, eval = F}
+
+Teams %>% 
+  filter(teamID == "CHN") %>%
+  select(yearID, HR, HRA) %>%
+  pivot_longer()
+```
