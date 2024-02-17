@@ -1,0 +1,122 @@
+---
+title: "More data Wrangling with joins and tidyR"
+#author: "Insert Name"
+date: "Math 241, Week 4"
+output:
+  pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r libraries, message = FALSE}
+# it's good practice to check that all the packages required are loaded and installed
+libs <- c('tidyverse','knitr','viridis','mosaicData','babynames','mdsr','Lahman','nycflights13')
+for(l in libs){
+  if(!require(l,character.only = TRUE, quietly = TRUE)){
+    message( sprintf('Did not have the required package << %s >> installed. Downloading now ... ',l))
+    install.packages(l) 
+  }
+  library(l, character.only = TRUE, quietly = TRUE)
+}
+```
+
+## Goals of this in-class activity:
+
+- Practice data wrangling and joins with tidyR
+
+## Notes:
+
+* Be prepared to ask for help from me, Tory, and your classmates!
+
+## Problem 1 (Medium): 
+Consider the number of home runs hit (HR) and home runs allowed (HRA) for the Chicago Cubs (CHN) baseball team. Reshape the Teams data from the `Lahman` package into “long” format and plot a time series conditioned on whether the HRs that involved the Cubs were hit by them or allowed by them.
+
+```{r}
+
+Teams %>% 
+  filter(teamID == "CHN") %>%
+  select(yearID, HR, HRA) %>%
+  pivot_longer(-yearID, names_to = "type", values_to = "home_runs") %>%
+  ggplot(aes(x = yearID, y = home_runs, color = type)) +
+  geom_point() +
+  geom_line()
+```
+
+## Problem 2 (Medium): 
+Use the `nycflights13` package and the `flights` and `planes` tables to answer the following questions:
+
+a. How many planes have a missing date of manufacture?
+
+```{r}
+library(nycflights13)
+planes2 <- select(planes, tailnum, year, manufacturer)
+flights2 <- select(flights, tailnum)
+nyc_flights <- left_join(planes2, flights2)
+nyc_flights2 <- nyc_flights %>%
+  filter(is.na(year)) %>%
+  distinct(tailnum)
+nrow(nyc_flights2)
+```
+
+There are 70 airplanes with a missing date of manufacture.
+
+
+b. What are the five most common manufacturers?
+
+```{r}
+nyc_flights %>%
+  select(manufacturer, tailnum, year) %>%
+  unique() %>%
+  group_by(manufacturer) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count))
+```
+
+
+## Problem 3 (Medium): 
+Use the `nycflights13` package and the `flights` and `planes` tables to answer the following questions:
+
+a. What is the oldest plane (specified by the `tailnum` variable) that flew from
+New York City airports in 2013?
+
+```{r}
+planes2 <- dplyr::select(planes, tailnum, year)
+flights2 <- dplyr::select(flights, tailnum)
+nyc_flights <- left_join(planes2, flights2)
+head(nyc_flights)
+```
+
+N381AA, manufactured in 1956, is the oldest plane that flew from NYC in 2013.
+
+b. How many airplanes that flew from New York City are included in the
+planes table?
+
+```{r}
+nyc_flights2 <- distinct(nyc_flights)
+nrow(nyc_flights2)
+```
+
+There are 3322 unique airplanes.
+
+## Problem 4 (Medium): 
+The `knitr` package allows the analyst to display nicely formatted tables and results when outputting to pdf files. Use the following code chunk as an example to create a similar display for the `penguins` dataset, in the `palmerpenguins` package, instead (you can model penguins' `body_mass_g` as a function of their `flipper_length_mm` and `sex`):
+
+```{r}
+mod <- broom::tidy(lm(cesd ~ mcs + sex, data = HELPrct))
+knitr::kable(
+  mod,
+  digits = c(0, 2, 2, 2, 4),
+  caption = "Regression model from HELP clinical trial.",
+  longtable = TRUE
+)
+```
+
+```{r}
+library(palmerpenguins)
+mod <- broom::tidy(lm(body_mass_g ~ flipper_length_mm + sex, data = penguins))
+knitr::kable(mod, digits = c(0, 1, 1, 1, 4), longtable = TRUE)
+```
