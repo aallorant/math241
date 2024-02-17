@@ -86,7 +86,9 @@ New York City airports in 2013?
 ```{r}
 planes2 <- dplyr::select(planes, tailnum, year)
 flights2 <- dplyr::select(flights, tailnum)
-nyc_flights <- left_join(planes2, flights2)
+nyc_flights <- left_join(planes2, flights2) %>%
+  arrange(year) %>%
+  unique()
 head(nyc_flights)
 ```
 
