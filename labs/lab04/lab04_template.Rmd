@@ -1,0 +1,22 @@
+---
+title: "Lab 4"
+#author: "Insert Name"
+date: "Math 241, Week 4"
+output:
+  pdf_document
+urlcolor: blue
+---
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+# Put all necessary libraries here
+library(tidyverse)
+```
+
+### Problem 1: COVID survey - interpretation
+
+
+### Problem 2: COVID survey - reconstruct
