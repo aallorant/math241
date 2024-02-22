@@ -1,0 +1,167 @@
+---
+title: "Lab 5"
+#author: "Insert Name"
+date: "Math 241, Week 6"
+output:
+  pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
+
+```
+
+```{r}
+# Put all necessary libraries here
+library(tidyverse)
+library(rnoaa)
+library(rvest)
+library(httr)
+```
+
+
+
+## Due: Friday, March 1st at 8:30am
+
+## Goals of this lab
+
+1. Practice grabbing data from the internet.
+1. Learn to navigate new R packages.
+1. Grab data from an API (either directly or using an API wrapper).
+1. Scrape data from the web.
+
+
+## Potential API Wrapper Packages
+
+## Problem 1: Predicting the ~~Un~~predictable: Portland Weather
+
+In this problem let's get comfortable with extracting data from the National Oceanic and Atmospheric Administration's (NOAA) API via the R API wrapper package `rnoaa`.
+
+You can find more information about the datasets and variables [here](https://www.ncdc.noaa.gov/homr/reports).
+
+```{r}
+# Don't forget to install it first!
+library(rnoaa)
+```
+
+a. First things first, go to [this NOAA website](https://www.ncdc.noaa.gov/cdo-web/token) to get a key emailed to you.  Then insert your key below:
+
+```{r, eval = FALSE}
+options(noaakey = "INSERT KEY")
+```
+
+
+
+b. From the National Climate Data Center (NCDC) data, use the following code to grab the stations in Multnomah County. How many stations are in Multnomah County?
+
+```{r, eval = FALSE}
+stations <- ncdc_stations(datasetid = "GHCND", 
+                          locationid = "FIPS:41051")
+
+mult_stations <- stations$data
+```
+
+
+
+c. January was not so rainy this year, was it?  Let's grab the precipitation data for site `GHCND:US1ORMT0006` for this past January.
+
+```{r, eval = FALSE}
+# First fill-in and run to following to determine the
+# datatypeid
+ncdc_datatypes(datasetid = "GHCND",
+               stationid = "")
+
+# Now grab the data using ncdc()
+precip_se_pdx <- ncdc()
+```
+
+d.  What is the class of `precip_se_dpx`?  Grab the data frame nested in `precip_se_dpx` and call it `precip_se_dpx_data`.
+
+
+
+e. Use `ymd_hms()` in the package `lubridate` to wrangle the date column into the correct format.
+
+
+
+f. Plot the precipitation data for this site in Portland over time.  Rumor has it that we had only one day where it didn't rain.  Is that true?
+
+
+g. (Bonus) Adapt the code to create a visualization that compares the precipitation data for January over the the last four years.  Do you notice any trend over time?
+
+
+
+
+## Problem 2: From API to R 
+
+For this problem I want you to grab web data by either talking to an API directly with `httr` or using an API wrapper.  It must be an API that we have NOT used in class or in Problem 1.
+
+Once you have grabbed the data, do any necessary wrangling to graph it and/or produce some summary statistics. Draw some conclusions from your graph and summary statistics.
+
+### API Wrapper Suggestions for Problem 2
+
+Here are some potential API wrapper packages.  Feel free to use one not included in this list for Problem 2.
+
+* `gtrendsR`: "An interface for retrieving and displaying the information returned online by Google Trends is provided. Trends (number of hits) over the time as well as geographic representation of the results can be displayed."
+* [`rfishbase`](https://github.com/ropensci/rfishbase): For the fish lovers
+* [`darksky`](https://github.com/hrbrmstr/darksky): For global historical and current weather conditions
+
+
+
+## Problem 3: Scraping Reedie Data
+
+Let's see what lovely data we can pull from Reed's own website.  
+
+a. Go to [https://www.reed.edu/ir/success.html](https://www.reed.edu/ir/success.html) and scrape the two tables.
+
+
+
+
+b. Grab and print out the table that is entitled "GRADUATE SCHOOLS MOST FREQUENTLY ATTENDED BY REED ALUMNI".  Why is this data frame not in a tidy format?
+
+
+
+c. Wrangle the data into a tidy format. Glimpse the resulting data frame.
+
+
+
+d. Now grab the "OCCUPATIONAL DISTRIBUTION OF ALUMNI" table and turn it into an appropriate graph.  What conclusions can we draw from the graph?
+
+```{r}
+# Hint: Use `parse_number()` within `mutate()` to fix one of the columns
+```
+
+
+
+
+
+e. Let's now grab the Reed graduation rates over time.  Grab the data from [here](https://www.reed.edu/ir/gradrateshist.html).
+
+Do the following to clean up the data:
+
+* Rename the column names.  
+
+```{r,eval = FALSE}
+# Hint
+colnames(___) <- c("name 1", "name 2", ...)
+```
+
+* Remove any extraneous rows.
+
+```{r, eval = FALSE}
+# Hint
+filter(row_number() ...)
+```
+
+* Reshape the data so that there are columns for 
+    + Entering class year
+    + Cohort size
+    + Years to graduation
+    + Graduation rate
+
+* Make sure each column has the correct class.    
+
+
+f. Create a graph comparing the graduation rates over time and draw some conclusions.
