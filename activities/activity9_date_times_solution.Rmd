@@ -1,0 +1,81 @@
+---
+title: "Activity 9: Dates and times"
+output: pdf_document
+date: "2024-02-27"
+---
+
+```{r, echo = F, message=F}
+knitr::opts_chunk$set(
+  warning = F,
+  message = F
+)
+# load packages
+library(tidyverse)
+library(lubridate)
+library(ggridges)
+```
+
+## Getting data from the internet, using lubridate, learning a new plot.
+
+The goal of this exercise is to use our skills to get data from online, transform the date/time, and learn how to make a new plot (ridgeline plot). The data we will use for this exercise is the biketown data.
+
+### Question 1:
+
+* Get the data about rides in January, July, and November of 2017, and **bind** them into a single data frame using `bind_rows`:
+(Hint: use the `readr::read_csv` function to directly read the csv from the url pointing to the data)
+
+```{r, eval = F}
+
+biketown_data <- bind_rows(bk_jan, bk_jul, bk_nov) %>%
+  select(StartDate, StartTime, EndDate, EndTime, Distance_Miles,
+         BikeID)
+```
+
+
+```{r, echo = FALSE}
+biketown_data <- bind_rows(readr::read_csv("https://s3.amazonaws.com/biketown-tripdata-public/2017_01.csv"),
+                           readr::read_csv("https://s3.amazonaws.com/biketown-tripdata-public/2017_07.csv"),
+                           readr::read_csv("https://s3.amazonaws.com/biketown-tripdata-public/2017_11.csv")) %>%
+  
+  select(StartDate, StartTime, EndDate, EndTime, Distance_Miles,
+         BikeID)
+
+  
+```
+
+### Question 2:
+
+* Reproduce the plot below, using the `lubridate` functions(`mdy`, `ymd_hms`, `wday`, `month`):
+
+```{r, eval = F, fig.width = 12, fig.height = 8}
+
+biketown_dt <- biketown_data %>%
+  mutate()%>%
+  filter(Distance_Miles < 10) # filter for outlying trips!
+
+biketown_dt %>%
+  ggplot(aes(y =..., x = Distance_Miles, fill = ...)) +
+  geom_density_ridges(scale = 4) +
+  facet_wrap(~ ..., nrow = 3) +
+  labs(x = 'Distance (Miles)', y = 'Day of the week') +
+  theme_ridges() +
+  theme(legend.position = 'none')
+  
+```
+
+```{r, fig.width = 12, fig.height = 8, echo = FALSE}
+library(lubridate)
+biketown_dt <- biketown_data %>%
+  mutate(StartDate = mdy(StartDate),
+         EndDate = mdy(EndDate)) %>%
+  filter(Distance_Miles < 10)
+
+biketown_dt %>%
+  ggplot(aes(y =  wday(StartDate, label = TRUE), x = Distance_Miles, fill = wday(StartDate, label = TRUE))) +
+  geom_density_ridges(scale = 4) +
+  facet_wrap(~month(StartDate, label = TRUE), nrow = 3) +
+  labs(x = 'Distance (Miles)', y = 'Day of the week') +
+  theme_ridges() +
+  theme(legend.position = 'none')
+
+```
