@@ -1,0 +1,52 @@
+---
+title: "Lab 6"
+author: "Insert Name"
+date: "Math 241, Week 8"
+output:
+  pdf_document
+---
+
+```{r setup, include=FALSE}
+# Do not modify this chunk.
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+# Put all necessary libraries here
+library(tidyverse)
+library(leaflet)
+library(tidycensus)
+```
+
+
+
+## Due: Friday, March 22nd at 8:30am
+
+
+## Goals of this lab
+
+* Practice creating static and interactive choropleth maps.
+
+### Problem 1: Mapping Bike Rides in Portland
+
+For this problem we will return to the biketown dataset.
+
+a. Grab the code from activity 9, Problem 1 to read the data directly from Biketown's API- make sure to keep the longitude and latitude of the start of each ride (`StartLatitude`, `StartLongitude`).
+
+b. Create an interactive map of the start point of the rides using the `leaflet` package.  Make sure to include a legend and a title.  What do you notice about the distribution of rides?
+
+c. Using the `lubridate` package, create a variable, `month`, indicating the month of each variable.
+
+Add this variable to your interactive map using color.  Make sure to include a legend and be mindful of your color palette choice.  Do ride locations vary by months of the year?
+
+### Problem 2: Choropleth Maps
+
+For this problem, I want you to practice creating choropleth maps.  Let's grab some data using `tidycensus`.  Remember that you will have to set up an [API key](https://api.census.gov/data/key_signup.html).
+
+```{r, eval = FALSE}
+api_key <- "insert key"
+```
+
+a. Let's grab data on the median gross rent (`B25064_001`) from the American Community Survey for Multnomah county, Oregon.  I want you to do data pulls at three geography resolutions: county subdivision, tract, and block group.
+
+b. Create three choropleth maps of gross rent, one for each geography resolution.  What information can we glean from these maps?  Also, which resolution seems most useful for this variable?  Justify your answer.
