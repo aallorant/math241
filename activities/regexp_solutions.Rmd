@@ -1,0 +1,75 @@
+---
+title: "Practicing Regular Expressions"
+subtitle: "Math 241, Week 8"
+output: pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+#Load tidyverse
+library(tidyverse)
+library(mdsr)
+```
+
+
+## Problem 1 (Easy): 
+
+Use the `Macbeth_raw` data from the `mdsr` package to answer the following questions:
+
+a. Find all of the adjectives in Macbeth that end in more or less
+
+
+```{r}
+data(Macbeth_raw)
+lines <- strsplit(Macbeth_raw, "\r\n")[[1]]
+words <- strsplit(paste(lines, collapse = " "), " ")[[1]]
+grep("[a-z]+(more|less)$", words, value = TRUE)
+```
+
+
+b. Find all of the lines containing the stage direction Exit or Exeunt.
+
+```{r}
+lines <- strsplit(Macbeth_raw, "\r\n")[[1]]
+grep("(Exit|Exeunt)", lines, value = TRUE)
+```
+
+## Problem 2 (Medium): 
+
+a. Use regular expressions to determine the number of speaking lines in the Complete Works of William Shakespeare. Here, we care only about how many times a character speaks—not what they say or for how long they
+speak.
+
+```{r}
+shakespeare_url <- "https://www.gutenberg.org/files/100/100-0.txt"
+shakespeare <- RCurl::getURL(shakespeare_url) %>% str_split("\r\n") %>%
+  pluck(1)
+length(shakespeare)
+```
+
+```{r}
+speaker_lines_pattern <- "[A-Z ]+\\." # I want any number of uppercase characters followed by a period
+speaker_lines <- grep(speaker_lines_pattern,shakespeare)
+length(speaker_lines)
+```
+
+b. Make a bar chart displaying the top 100 characters with the greatest number of lines. Hint you may want to use either the `stringr::str_extract` or `strsplit` function here.
+
+```{r}
+speakers <- str_extract(shakespeare, speaker_lines_pattern)
+speaker_df <- speakers %>% 
+  data.frame(speaker = .) %>% 
+  filter(!is.na(speaker)) %>% 
+  group_by(speaker) %>% 
+  summarize(N = n()) %>%
+  arrange(desc(N)) %>% head(100)
+
+ggplot(data = speaker_df, aes(x = reorder(speaker, N), y = N)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+
