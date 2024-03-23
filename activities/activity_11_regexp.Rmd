@@ -1,0 +1,60 @@
+---
+title: "Practicing Regular Expressions"
+subtitle: "Math 241, Week 8"
+output: pdf_document
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+#Load tidyverse
+library(tidyverse)
+library(mdsr)
+```
+
+
+## Problem 1 (Easy): 
+
+Use the `Macbeth_raw` data from the `mdsr` package to answer the following questions:
+
+a. Find all of the adjectives in Macbeth that end in more or less
+
+
+```{r}
+data(Macbeth_raw)
+
+```
+
+
+b. Find all of the lines containing the stage direction Exit or Exeunt.
+
+```{r}
+
+```
+
+## Problem 2 (Medium): 
+
+a. Use regular expressions to determine the number of speaking lines in the Complete Works of William Shakespeare. Here, we care only about how many times a character speaks—not what they say or for how long they
+speak.
+
+```{r, eval = FALSE}
+shakespeare_url <- "http://www.gutenberg.org/files/100/100-0.txt"
+shakespeare <- RCurl::getURL(shakespeare_url) %>%
+  
+```
+
+```{r}
+
+```
+
+b. Make a bar chart displaying the top 100 characters with the greatest number of lines. Hint you may want to use either the `stringr::str_extract` or `strsplit` function here.
+
+```{r}
+# Here are two different ways to get the list of speakers:
+
+```
+
+

@@ -34,6 +34,13 @@ For this problem we will return to the biketown dataset.
 a. Grab the code from activity 9, Problem 1 to read the data directly from Biketown's API- make sure to keep the longitude and latitude of the start of each ride (`StartLatitude`, `StartLongitude`).
 
 b. Create an interactive map of the start point of the rides using the `leaflet` package.  Make sure to include a legend and a title.  What do you notice about the distribution of rides?
+```{r}
+biketown_data %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(lng = ~StartLongitude, lat = ~StartLatitude)
+```
+
 
 c. Using the `lubridate` package, create a variable, `month`, indicating the month of each variable.
 
