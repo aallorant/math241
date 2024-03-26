@@ -1,0 +1,153 @@
+---
+title: "gganimate - activity"
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+Visualizing how civil liberties have evolved over time.
+
+```{r}
+#| label: load-packages
+#| echo: false
+#| message: false
+#| warning: false
+library(countdown)
+library(tidyverse)
+library(gt)
+library(readxl)
+library(gganimate)
+library(gifski)
+library(knitr)
+library(kableExtra)
+library(palmerpenguins)
+library(transformr)
+library(datasauRus)
+
+```
+
+## Data
+
+Freedom House has analyzed challenges to freedom and advocated for greater political rights and civil liberties in a variety of publications over the years. They produce an ordinal variable from 1 to 7- from more to less civil liberties (More about the data)\[https://freedomhouse.org/reports/publication-archives\].
+
+```{r}
+#| label: get-data
+#| cache: true
+#| echo: false
+#| message: false
+#| warning: false
+#| out-width: "80%"
+
+freedom <- read_csv(here::here("freedom.csv"), na = "-")
+
+freedom_ranked <- freedom %>%
+  select(country, contains("cl_")) %>%
+  pivot_longer(
+    cols = -country,
+    names_to = "year",
+    values_to = "civil_liberty",
+    names_prefix = "cl_",
+    names_transform = list(year = as.numeric)
+  ) %>%
+  group_by(year) %>%
+  mutate(rank_in_year = rank(civil_liberty, ties.method = "first")) %>%
+  ungroup()
+
+```
+
+# Your first interactive visualization!
+
+-   **Demo:**: create a simple static line plots of your country of choice civl liberty score over time
+
+```{r}
+#| label: simple-line-plot
+#| eval: false
+
+freedom_ranked %>%
+  filter() %>% 
+  ggplot()
+
+```
+
+-   **Demo:** Build on your previous plot to create an interactive version of the figure. Hint: use `transition_reveal()`
+
+# Visualizing multiple countries at once!
+
+In this part, rather than focusing on one country's civil liberty score over time, we want to look at countries' ranking.
+
+We have a long list of countries, and we may want to focus on visualizing the ranking of a limited number of countries over time.
+
+```{r}
+#| label: subset-countries
+#| eval: false
+countries_to_plot <- freedom %>%
+  rowwise() %>%
+  mutate(sd = sd(c_across(contains("cl_")), na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(desc(sd)) %>%
+  relocate(country, sd) %>%
+  slice_head(n = 15) %>%
+  pull(country)
+
+freedom_to_plot <- freedom %>%
+  filter(country %in% countries_to_plot) %>%
+  drop_na()
+
+freedom_ranked <- freedom %>%
+  select(country, contains("cl_")) %>%
+  pivot_longer(
+    cols = -country,
+    names_to = "year",
+    values_to = "civil_liberty",
+    names_prefix = "cl_",
+    names_transform = list(year = as.numeric)
+  ) %>%
+  group_by(year) %>%
+  mutate(rank_in_year = rank(civil_liberty, ties.method = "first")) %>%
+  ungroup()
+
+```
+
+-   **Demo:** Create a simple static bar plot showing a country's `civil_liberty` as a function of a country's `rank` for the years 1990, 2000, 2010.
+
+```{r}
+#| label: geom-col
+#| eval: false
+
+# add code here
+
+# hint: to label each bar with country name, you can use 
+
+geom_text(
+  hjust = "right", 
+  aes(label = country), 
+  x = -1)
+
+```
+
+## Interactive figure
+
+-   **Demo:** Build on your previous plot to create an interactive version of the figure. Specifically, you want to see the ranking over the whole time series. Hint: use `transition_time()`
+
+```{r}
+
+#| label: interactive-geom-col
+#| eval: false
+
+# hint: make sure all the years are included this time
+
+
+# add code here
+
+# hint: label each year with   
+
+geom_text(
+    x = 5, y = 1,
+    hjust = "left",
+    aes(label = as.character(year)),
+    size = 10
+  )
+
+```
