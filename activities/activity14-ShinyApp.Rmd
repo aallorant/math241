@@ -1,0 +1,101 @@
+---
+title: "App Practice"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+For each of these problems, I am giving you some static code as a starting point. Take this code and then follow the workflow we saw in the slides.
+
+1. Create the app folder and an app.r script file.
+2. Iterate between editing, running and experimenting with the app.
+
+Also, here's some template code to get you started on each app.  
+
+```{r, eval = FALSE}
+# Load libraries
+library(shiny)
+
+# User interface
+ui <- fluidPage(
+  titlePanel(),
+  sidebarLayout(
+    sidebarPanel(
+    ),
+    mainPanel(
+    )
+  )
+)
+
+# Server function
+server <- function(input, output){}
+
+# Creates app
+shinyApp(ui = ui, server = server)
+
+```
+
+
+## Problem 1
+
+For this plot, create an app where you let the user pick which days of the week are on the plot using `checkboxGroupInput()`.  Look at [this page](https://shiny.rstudio.com/gallery/widget-gallery.html) for an example of this widget.  
+
+```{r}
+library(mosaic)
+library(tidyverse)
+
+Births2015 %>%
+  filter(wday %in% c("Sun", "Wed", "Fri")) %>%
+ggplot(mapping = aes(x = date, y = births, 
+                     color = wday)) + 
+  geom_point() + 
+  theme(legend.position = "bottom")
+```
+
+
+
+## Problem 2
+
+Now let's add another input widget to the app: `dateRangeInput()`.  With this widget, we can let the user pick the range of dates that are graphed.  
+
+```{r}
+library(mosaic)
+library(tidyverse)
+library(lubridate)
+
+Births2015 %>%
+  filter(wday %in% c("Sun", "Wed", "Fri"),
+         date >= as_date("2015-02-14"), date <= as_date("2015-03-16")) %>%
+ggplot(mapping = aes(x = date, y = births, 
+                     color = wday)) + 
+  geom_point() + 
+  theme(legend.position = "bottom")
+```
+
+
+## Problem 3
+
+Lastly, let's practice adding a new text output.  We want to provide the maximum number of babies born and the day that happened for the days of the week and date range selected. We will add this text using `renderText({})` in the `server()` function and `textOutput()` in the `ui`.
+
+Here's a static version of what we want.
+
+```{r}
+Births2015_selected <- Births2015 %>%
+  filter(wday %in% c("Sun", "Wed", "Fri"),
+         date >= as_date("2015-02-14"), date <= as_date("2015-03-16")) 
+
+Births2015_max <- Births2015_selected %>%
+  filter(births == max(births))
+
+
+library(glue)
+glue("Between ", format(min(Births2015_selected$date), "%A, %B %d, %Y"), " and ",
+     format(max(Births2015_selected$date), "%A, %B %d, %Y"),
+     " and for the selected days of the week, the day with the most babies born was ", 
+     format(Births2015_max$date, "%A, %B %d, %Y"),
+     " with ", Births2015_max$births,
+           " babies born that day!")
+```
+
