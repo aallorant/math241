@@ -1,5 +1,5 @@
 ---
-title: "Quantifying uncertainty"
+title: "Bootstrap"
 editor: visual
 ---
 
@@ -16,21 +16,22 @@ library(tidymodels)
 
 By the end of today, you will...
 
--   Understand sampling variability
--   Review bootstrapping and confidence intervals
+-   Define and understand sampling variability
+-   Introduce bootstrapping
+-   Introduce confidence intervals
 
 ## Population vs Sample
 
 ### Motivation
 
-We have data on the price per guest (ppg) for a random sample of 50 Airbnb listings in 2022 for Portland. We are going to use these data to investigate what we would of expected to pay for an Airbnb in June 2022. Read in the data and answer the following questions.
+We have data on the price per guest (ppg) for a random sample of 50 Airbnb listings in 2022 for Portland. We are going to use these data to investigate what we would of expected to pay for an Airbnb in in Portland in June 2022. Read in the data and answer the following questions.
 
 ```{r}
 #| label: data
 #| message: false
 #| warning: false
 
-abb <- read_csv("../data/portland.csv")
+abb <- read_csv("data/Portland.csv")
 
 glimpse(abb)
 ```
@@ -46,22 +47,31 @@ Use these data and the tools we've learned in this class to come up with your be
 ```{r}
 #| label: take-a-guess
 
-# add code here
+abb %>% 
+  summarize(ppg.mean = mean(ppg))
 ```
 
 Do you think your guess is correct?
 
+*Not really*
+
 -   If you want to estimate a population parameter, do you prefer to report a range of values the parameter might be in, or a single value?
+
+*Range of values*
 
 -   Variability - How spread out your data are. Uncertainty.
 
+Suppose we split the class in half and ask each student their height. Then, we calculate the mean height of students on each side of the classroom. Would you expect these two means to be exactly equal, close but not equal, or wildly different?
+
+*Close, but not equal*
+
 ## Why do we care?
 
-We can quantify the variability of the sample statistics to help calculate a range of plausible values for the population parameter of interest.
+**We can quantify the variability of the sample statistics to help calculate a range of plausible values for the population parameter of interest**
 
-Bootstrapping is a statistical procedure that re samples a single data set to create many simulated samples.
+**Bootstrapping is a statistical procedure that re samples a single data set to create many simulated samples.**
 
-# Simulation: via bootstrapping or "resampling" techniques
+# Simulation: via bootstrapping or "resampling" techniques (today's focus)
 
 The term bootstrapping comes from the phrase "pulling oneself up by one's bootstraps", which is a metaphor for accomplishing an impossible task without any outside help
 
@@ -81,7 +91,7 @@ Goal: create a distribution of sample statistics under "the same" conditions. Ho
 
 -   What is it?
 
-*Range of plausible values for our population parameter.*
+*Range of plausiable values for our population parameter... just like we wanted!*
 
 ### Exercise 1 - Airbnb
 
@@ -89,28 +99,29 @@ Let's bootstrap!
 
 It's good practice to ask yourself the following questions:
 
--   What is my sample statistic?
--   How many draws do we need for our bootstrap sample?
+-   What is my sample statistic? *76.6*
+-   How many draws do we need for our bootstrap sample? *n number of times (50)*
 
-Fill in the bootstrap sample code below.
+Fill in the \*\*\* from the bootstrap sample code below.
 
 ```{r boot-sample}
 #| label: bootstrap
 #| cache: true
-#| eval: false
 
-set.seed(12345)
+set.seed(12345) 
 
 boot_df <- abb %>%
-  
+  specify(response = ppg) %>%
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
 ```
 
 -   Take a glimpse at `boot_df`. What do you see?
 
 ```{r}
-#| label: glimpse-data
+#| label: glimse-data
 
-# add code here
+glimpse(boot_df)
 ```
 
 -   Plot a histogram of `boot_df`. Where is it centered? Why does this make sense?
@@ -118,7 +129,11 @@ boot_df <- abb %>%
 ```{r}
 #| label: hist-1
 
-# add code here
+boot_df %>% 
+  ggplot(
+    aes( x = stat)
+  ) + 
+  geom_histogram()
 ```
 
 Now, let's use `boot_df`to create our 95% confidence interval.
@@ -126,36 +141,36 @@ Now, let's use `boot_df`to create our 95% confidence interval.
 ```{r}
 #| label: CI
 
-# add code here
+boot_df %>%
+  summarize(
+    lower = quantile(stat, 0.025),
+    upper = quantile(stat, 0.975)
+  )
 ```
 
 Let's visualize our confidence interval by adding a vertical line at each of these values. Use the code you wrote above and add two lines using `geom_vline`.
 
 ```{r}
-#| label: CI-Viz
+#| label: CI-viz
 
-# add code here
+boot_df %>%
+  ggplot(
+    aes(x = stat)
+  ) + 
+  geom_histogram() + 
+  geom_vline(xintercept = c(63.3, 91.0)) 
 ```
 
 ## Interpretation
 
 Confidence intervals - range of plausible values for our parameter of interest
 
-Confidence intervals are often misinterpreted as probability....
-
 -   How do we interpret this?
 
-A. There is a 95% probability the true mean price per night for an Airbnb in Portland is between 63.3 and 91.0 USD.
+A There is a 95% probability the true mean price per night for an Airbnb in Portland is between 63.3 and 91.0.
 
-B. There is a 95% probability the price per night for an Airbnb in Portland is between 63.3 and 91.0 USD.
+B There is a 95% probability the price per night for an Airbnb in Portland is between 63.3 and 91.0.
 
-C. We are 95% confident the true mean price per night for Airbnbs in Portland is between 63.3 and 91.0 USD.
+**C We are 95% confident the true mean price per night for Airbnbs in Portland is between 63.3 and 91.0 \$.**
 
-D. We are 95% confident the price per night for an Airbnb in Portland is between 63.3 and 91.0 USD.
-
-Now, create a 90% confidence interval. Report it below. Is it wider or more narrow than the 95% confidence interval?
-
-```{r}
-
-# add code here
-```
+D We are 95% confident the price per night for an Airbnb in Portland is between 63.3 and 91.0.
