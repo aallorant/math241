@@ -1,0 +1,55 @@
+---
+title: "Lab 8"
+date: "Math 241, Week 11"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(tidyverse)
+library(tidymodels)
+library(openintro)
+library(mdsr)
+library(mosaicData)
+library(shiny)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE)
+```
+
+## Due: Friday, April 12th at 8:30am
+
+## Goals of this lab
+
+-   In this lab, you will work with observational data to assess the relationship between an exposure and the incidence of a disease.
+- You will practice bootstrap to calculate a 95%CI.
+- You will create an interactive web application with `shiny`.
+
+## Exercise 1:
+
+The `Whickham` data set in the `mosaicData` package includes data on age, smoking, and mortality from a one-in-six survey of the electoral roll in Whickham, a mixed urban and rural district near Newcastle upon Tyne, in the United Kingdom. The survey was conducted in 1972--1974 to study heart disease and thyroid disease. A follow-up on those in the survey was conducted 20 years later. Describe the association between smoking status and mortality in this study. Be sure to consider the role of age as a possible confounding factor.
+
+## Exercise 2:
+
+a) Calculate the mean age of birthing people from the `Gestation` data set from the `mosaicData` package.
+
+```{r}
+```
+
+b) Use the bootstrap to generate and interpret a 95% confidence interval for the mean age of birthing people.
+
+```{r}
+
+```
+
+## Exercise 3:
+
+Using data from the `palmerpenguins` package, create a Shiny app that displays measurements from the penguins dataframe. Allow the user to select a species or a gender, and to choose between various attributes on a scatterplot. (Hint: examples of similar apps can be found at the Shiny gallery).
+
+```{r}
+
+```
