@@ -26,8 +26,8 @@ knitr::opts_chunk$set(
 ## Goals of this lab
 
 -   In this lab, you will work with observational data to assess the relationship between an exposure and the incidence of a disease.
-- You will practice bootstrap to calculate a 95%CI.
-- You will create an interactive web application with `shiny`.
+-   You will practice bootstrap to calculate a 95%CI.
+-   You will create an interactive web application with `shiny`.
 
 ## Exercise 1:
 
@@ -35,12 +35,12 @@ The `Whickham` data set in the `mosaicData` package includes data on age, smokin
 
 ## Exercise 2:
 
-a) Calculate the mean age of birthing people from the `Gestation` data set from the `mosaicData` package.
+a)  Calculate the mean age of birthing people from the `Gestation` data set from the `mosaicData` package.
 
 ```{r}
 ```
 
-b) Use the bootstrap to generate and interpret a 95% confidence interval for the mean age of birthing people.
+b)  Use the bootstrap to generate and interpret a 95% confidence interval for the mean age of birthing people.
 
 ```{r}
 
